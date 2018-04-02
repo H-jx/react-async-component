@@ -1,8 +1,12 @@
 {
-  "name": "react-async-component",
-  "version": "1.0.1",
+  "name": "react-async-import-component",
+  "version": "1.0.3",
   "description": "react-async-component",
   "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/H-jx/react-async-component.git"
+  },
   "dependencies": {},
   "devDependencies": {
     "babel": "^6.23.0",

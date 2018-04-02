@@ -1,35 +1,63 @@
 import * as React from 'react';
 
-export const asyncComponent = (importComponent) => (
-    class asyncComponent extends React.Component {
+
+/**
+ * @interface Options {
+ *  resolve: () =>:Promise {},
+ *  LoadingComponent?: React.Component,
+ *  ErrorComponent?: React.Component,
+ * }
+ * @param {Options | Function} options
+ */
+const asyncComponentHOC = (options) => {
+    let resolve;
+    let LoadingComponent = null;
+    let ErrorComponent = null;
+    if (typeof options === 'function') {
+        resolve = options;
+    } else if (Object.prototype.toString.call(options) === '[object Object]') {
+        if (typeof options.resolve === 'function') {
+            resolve = options.resolve;
+        } else {
+            throw Error('resolve: must be a function');
+        }
+        LoadingComponent = options.LoadingComponent === undefined ? null : options.LoadingComponent;
+        ErrorComponent = options.ErrorComponent === undefined ? null : options.ErrorComponent;
+    }
+
+    return class asyncComponent extends React.Component {
         constructor() {
             super();
             this.state = {
-                Component: null
-            }
+                Component: LoadingComponent,
+            };
         }
 
         componentWillMount() {
-            if (this.state.Component !== null) { return false; }
-            importComponent()
-                .then((module) => module.default)
-                .then((Component) => {
-                    this.setState({
-                        Component
-                    });
-                    this.displayName = Component.displayName || Component.name || 'Compnenet';
-                })
-                .catch((err) => {
-                    console.error('load Componet failed');
-                    throw err;
+            resolve().then((module) => {
+                if (module.default) {
+                    return module.default;
+                }
+                return module;
+            }).then((Component) => {
+                this.setState({
+                    Component,
                 });
+                this.displayName = Component.displayName || Component.name || 'Compnenet';
+            }).catch((err) => {
+                this.setState({
+                    Component: ErrorComponent,
+                });
+                throw err;
+            });
             return false;
         }
 
         render() {
-            var { Component } = this.state;
-            return (Component !== null) ? <Component {...this.props} /> : null;
+            const { Component } = this.state;
+            return (Component === null ? null : <Component {...this.props} />);
         }
+    };
+};
+export default asyncComponentHOC;
 
-    }
-)

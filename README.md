@@ -1,3 +1,7 @@
+
+env:
+ webpack@^2.0
+
 ```bash
 import asyncComponent from 'react-async-component';
 export const routes = [
