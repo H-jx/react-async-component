@@ -10,14 +10,31 @@ Resolve components asynchronously, with support for code splitting and advanced 
 ```jsx
 import asyncComponent from 'react-async-import-component';
 const Component = asyncComponent({
-    resolve: () => import(/* webpackChunkName: "Component" */ 'ROOT/pages/disk'),
+    resolve: () => import(/* webpackChunkName: "Component" */ 'src/xxxx'),
     LoadingComponent: () => (<div>loading</div>),
-    ErrorComponent: () => (<div>loading</div>),
+    ErrorComponent: () => (<div>Error</div>),
 })
 
-<Component />
+const AppRouter = () => (
+    <Router>
+        <Switch>
+            <Route path="/" component={Component} />
+        </Switch>
+    </Router>
+);
 ```
+
+or
+
 ```jsx
-const Component = asyncComponent(() => import(/* webpackChunkName: "status" */ '@/views/status/toLogin'));
-  }
+const Component = asyncComponent(() => import(/* webpackChunkName: "status" */ 'src/xxxx'));
+}
+
+const AppRouter = () => (
+    <Router>
+        <Switch>
+            <Route path="/" component={Component} />
+        </Switch>
+    </Router>
+);
 ```
