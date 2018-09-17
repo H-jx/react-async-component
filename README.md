@@ -18,8 +18,8 @@ import asyncComponent from 'react-async-import-component';
 
 const Component = asyncComponent({
     resolve: () => import(/* webpackChunkName: "Component" */ 'src/xxxx'),
-    LoadingComponent: () => (<div>loading</div>),
-    ErrorComponent: () => (<div>Error</div>),
+    loading: () => (<div>loading</div>),
+    error: () => (<div>Error</div>),
 })
 
 const AppRouter = () => (

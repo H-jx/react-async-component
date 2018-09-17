@@ -21,8 +21,8 @@ const asyncComponentHOC = (options) => {
         } else {
             throw Error('resolve: must be a function');
         }
-        LoadingComponent = options.LoadingComponent === undefined ? null : options.LoadingComponent;
-        ErrorComponent = options.ErrorComponent === undefined ? null : options.ErrorComponent;
+        LoadingComponent = options.loading === undefined ? null : options.loading;
+        ErrorComponent = options.error === undefined ? null : options.error;
     }
 
     return class asyncComponent extends React.Component {
